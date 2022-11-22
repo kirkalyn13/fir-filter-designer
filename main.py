@@ -2,16 +2,16 @@ import tkinter as tk
 import util.color as color
 import ui.app as ui
 
-app_title = "Finite Impulse Response Filter Design"
-icon_path = "assets/waveform_icon.png"
-size = "600x500"
+APP_TITLE = "Finite Impulse Response Filter Design"
+ICON_PATH = "assets/waveform_icon.png"
+SIZE = "600x500"
 
 def main():
     ## App Setup
     root = tk.Tk()
-    root.title(app_title)
-    root.geometry(size)
-    app_icon = tk.PhotoImage(file=icon_path)
+    root.title(APP_TITLE)
+    root.geometry(SIZE)
+    app_icon = tk.PhotoImage(file=ICON_PATH)
     root.configure(bg=color.bg, padx=20, pady=20)
     root.iconphoto(False, app_icon)
 
