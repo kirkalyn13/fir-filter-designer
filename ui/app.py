@@ -2,23 +2,80 @@ import tkinter as tk
 import util.color as color
 import util.font as font
 
-title_text = "Finite Impulse Response Filter Design"
-filters = ["High Pass", "Low Pass", "Band Pass", "Band Stop"]
+title_text = "Finite Impulse Response\nFilter Design"
+icon_path = "./assets/waveform_icon.png"
+filters = ["Low Pass", "High Pass", "Band Pass", "Band Stop"]
+window_types = ["Rectangular","Bartlett","Hanning","Hamming","Blackman"]
 
 def run_app(window):
     global root
     root = window
 
-    tk.Label(root, text=title_text, bg=color.bg, fg=color.text, font=font.title, padx=10).grid(row=0, column=0)
-
+    ## Setup filters
     global filter_select
     filter_select = tk.StringVar(root)
     filter_select.set(filters[0])
 
-    tk.OptionMenu(root, filter_select, *filters).grid(row=1, column=0)
+    ## Setup window types
+    global window_select
+    window_select = tk.StringVar(root)
+    window_select.set(window_types[0])
 
-    tk.Button(root, text='Select', command=select_filter, width=8, font=font.text, bg=color.accent, fg=color.text).grid(row=2, column=0, pady=5)
+    ## Setup inputs
+    global input_sampling_freq
+    global input_filter_taps
+    global input_lower_cutoff
+    global input_upper_cutoff
 
-def select_filter():
+    ## Title
+    # app_icon = tk.PhotoImage(file=icon_path)
+    tk.Label(root, text=title_text, bg=color.bg, fg=color.text, font=font.title, padx=10).grid(row=0, column=0, pady=5)
+    # tk.Label(root, image=app_icon, bg=color.bg, pady=5).grid(row=0, column=1)
+
+    ## Filter Type
+    tk.Label(root, text="Filter Type:", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=1, column=0, sticky="W", pady=5)
+    tk.OptionMenu(root, filter_select, *filters).grid(row=1, column=1, sticky="E")
+
+    ## Window Type
+    tk.Label(root, text="Window Type:", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=2, column=0, sticky="W", pady=5)
+    tk.OptionMenu(root, window_select, *window_types).grid(row=2, column=1, sticky="E")
+
+    ## Sampling Frequency
+    tk.Label(root, text="Sampling Frequency (Hz):", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=3, column=0, sticky="W", pady=5)
+    input_sampling_freq = tk.Entry(root)
+    input_sampling_freq.grid(row=3, column=1, sticky="E")
+
+    ## Filter Taps
+    tk.Label(root, text="Filter Taps:", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=4, column=0, sticky="W", pady=5)
+    input_filter_taps = tk.Entry(root)
+    input_filter_taps.grid(row=4, column=1, sticky="E")
+
+    ## Lower Cutoff
+    tk.Label(root, text="Lower Cutoff (Hz):", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=5, column=0, sticky="W", pady=5)
+    input_lower_cutoff = tk.Entry(root)
+    input_lower_cutoff.grid(row=5, column=1, sticky="E")
+
+    ## Upper Cutoff
+    tk.Label(root, text="Upper Cutoff (Hz):", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=6, column=0, sticky="W", pady=5)
+    input_upper_cutoff = tk.Entry(root)
+    input_upper_cutoff.grid(row=6, column=1, sticky="E")
+
+    ## Buttons
+    tk.Button(root, text='Design', command=design_filter, width=10, font=font.text, bg=color.accent, fg=color.text).grid(row=7, column=0, padx=20, pady=10, sticky="E")
+    tk.Button(root, text='Reset', width=10,  font=font.text, bg=color.accent, fg=color.text).grid(row=7, column=1, padx=20, pady=10, sticky="E")
+
+def design_filter():
     selected_filter = filter_select.get()
-    print(f'Selected Filter: {selected_filter}')
+    selected_window_type = window_select.get()
+    sampling_freq = input_sampling_freq.get()
+    filter_taps = input_filter_taps.get()
+    lower_cutoff = input_lower_cutoff.get()
+    upper_cutoff = input_upper_cutoff.get()
+
+    print(f'Selected Filter: {selected_filter}') 
+    print(f'Selected Filter: {selected_window_type}')
+    print(f'Sampling Frequency: {sampling_freq} Hz') 
+    print(f'Filter Taps: {filter_taps}')
+    print(f'Lower Cutoff: {lower_cutoff} Hz') 
+    print(f'Upper Cutoff: {upper_cutoff} Hz')
+    
