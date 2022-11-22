@@ -1,12 +1,14 @@
 import tkinter as tk
 import util.color as color
 import util.font as font
+import util.error as error
 
 title_text = "Finite Impulse Response\nFilter Design"
 icon_path = "./assets/waveform_icon.png"
 filters = ["Low Pass", "High Pass", "Band Pass", "Band Stop"]
 window_types = ["Rectangular","Bartlett","Hanning","Hamming","Blackman"]
 
+## Render App UI
 def run_app(window):
     global root
     root = window
@@ -64,7 +66,13 @@ def run_app(window):
     tk.Button(root, text='Design', command=design_filter, width=10, font=font.text, bg=color.accent, fg=color.text).grid(row=7, column=0, padx=20, pady=10, sticky="E")
     tk.Button(root, text='Reset', width=10,  font=font.text, bg=color.accent, fg=color.text).grid(row=7, column=1, padx=20, pady=10, sticky="E")
 
+## Design Filter
 def design_filter():
+    ## Validate Inputs
+    is_invalid = validate_input()
+    if is_invalid:
+        return
+
     selected_filter = filter_select.get()
     selected_window_type = window_select.get()
     sampling_freq = input_sampling_freq.get()
@@ -78,4 +86,26 @@ def design_filter():
     print(f'Filter Taps: {filter_taps}')
     print(f'Lower Cutoff: {lower_cutoff} Hz') 
     print(f'Upper Cutoff: {upper_cutoff} Hz')
+
+## Validate Input
+def validate_input():
+    has_empty = check_empty_inputs()
+    if has_empty == False:
+        return check_integer_inputs()
+    return has_empty
+
+## Check for Empty Inputs 
+def check_empty_inputs():
+    if input_sampling_freq.get() == "" or input_filter_taps.get() == "" or input_lower_cutoff.get() == "" or input_upper_cutoff.get() == "":
+        error.warning("Incomplete Input", "Please make sure all fields are complete.")
+        return True
+    return False
+
+## Check for Non-Integer Inputs 
+def check_integer_inputs():
+    if input_sampling_freq.get().isnumeric() == False or input_filter_taps.get().isnumeric() == False \
+         or input_lower_cutoff.get().isnumeric() == False or input_upper_cutoff.get().isnumeric() == False :
+        error.warning("Invalid Input", "Input must be numeric values.")
+        return True
+    return False
     
