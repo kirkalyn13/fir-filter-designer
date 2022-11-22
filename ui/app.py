@@ -1,10 +1,11 @@
 import tkinter as tk
+from PIL import ImageTk, Image
 import util.color as color
 import util.font as font
 import util.error as error
 
 title_text = "Finite Impulse Response\nFilter Design"
-icon_path = "./assets/waveform_icon.png"
+logo_path = "./assets/waveform_logo.png"
 filters = ["Low Pass", "High Pass", "Band Pass", "Band Stop"]
 window_types = ["Rectangular","Bartlett","Hanning","Hamming","Blackman"]
 
@@ -31,41 +32,43 @@ def run_app(window):
     global input_upper_cutoff
 
     ## Title
-    # app_icon = tk.PhotoImage(file=icon_path)
-    tk.Label(root, text=title_text, bg=color.bg, fg=color.text, font=font.title, padx=10).grid(row=0, column=0, pady=5)
-    # tk.Label(root, image=app_icon, bg=color.bg, pady=5).grid(row=0, column=1)
+    app_logo = ImageTk.PhotoImage(Image.open(logo_path))
+    tk.Label(root, text=title_text, bg=color.bg, fg=color.text_light, font=font.title, padx=10).grid(row=0, column=0, pady=5)
+    logo = tk.Label(root, image=app_logo, bg=color.bg, pady=5)
+    logo.image_names = [app_logo]
+    logo.grid(row=0, column=1, sticky="E")
 
     ## Filter Type
-    tk.Label(root, text="Filter Type:", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=1, column=0, sticky="W", pady=5)
+    tk.Label(root, text="Filter Type:", bg=color.bg, fg=color.text_light, font=font.text, padx=10).grid(row=1, column=0, sticky="W", pady=5)
     tk.OptionMenu(root, filter_select, *filters).grid(row=1, column=1, sticky="E")
 
     ## Window Type
-    tk.Label(root, text="Window Type:", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=2, column=0, sticky="W", pady=5)
+    tk.Label(root, text="Window Type:", bg=color.bg, fg=color.text_light, font=font.text, padx=10).grid(row=2, column=0, sticky="W", pady=5)
     tk.OptionMenu(root, window_select, *window_types).grid(row=2, column=1, sticky="E")
 
     ## Sampling Frequency
-    tk.Label(root, text="Sampling Frequency (Hz):", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=3, column=0, sticky="W", pady=5)
+    tk.Label(root, text="Sampling Frequency (Hz):", bg=color.bg, fg=color.text_light, font=font.text, padx=10).grid(row=3, column=0, sticky="W", pady=5)
     input_sampling_freq = tk.Entry(root)
     input_sampling_freq.grid(row=3, column=1, sticky="E")
 
     ## Filter Taps
-    tk.Label(root, text="Filter Taps:", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=4, column=0, sticky="W", pady=5)
+    tk.Label(root, text="Filter Taps:", bg=color.bg, fg=color.text_light, font=font.text, padx=10).grid(row=4, column=0, sticky="W", pady=5)
     input_filter_taps = tk.Entry(root)
     input_filter_taps.grid(row=4, column=1, sticky="E")
 
     ## Lower Cutoff
-    tk.Label(root, text="Lower Cutoff (Hz):", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=5, column=0, sticky="W", pady=5)
+    tk.Label(root, text="Lower Cutoff (Hz):", bg=color.bg, fg=color.text_light, font=font.text, padx=10).grid(row=5, column=0, sticky="W", pady=5)
     input_lower_cutoff = tk.Entry(root)
     input_lower_cutoff.grid(row=5, column=1, sticky="E")
 
     ## Upper Cutoff
-    tk.Label(root, text="Upper Cutoff (Hz):", bg=color.bg, fg=color.text, font=font.text, padx=10).grid(row=6, column=0, sticky="W", pady=5)
+    tk.Label(root, text="Upper Cutoff (Hz):", bg=color.bg, fg=color.text_light, font=font.text, padx=10).grid(row=6, column=0, sticky="W", pady=5)
     input_upper_cutoff = tk.Entry(root)
     input_upper_cutoff.grid(row=6, column=1, sticky="E")
 
     ## Buttons
-    tk.Button(root, text='Design', command=design_filter, width=10, font=font.text, bg=color.accent, fg=color.text).grid(row=7, column=0, padx=20, pady=10, sticky="E")
-    tk.Button(root, text='Reset', width=10,  font=font.text, bg=color.accent, fg=color.text).grid(row=7, column=1, padx=20, pady=10, sticky="E")
+    tk.Button(root, text='DESIGN', command=design_filter, width=10, font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=0, padx=20, pady=10, sticky="E")
+    tk.Button(root, text='RESET', width=10,  font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=1, padx=20, pady=10, sticky="E")
 
 ## Design Filter
 def design_filter():

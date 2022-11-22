@@ -4,7 +4,7 @@ import ui.app as ui
 
 app_title = "Finite Impulse Response Filter Design"
 icon_path = "assets/waveform_icon.png"
-size = "700x500"
+size = "600x500"
 
 def main():
     ## App Setup
