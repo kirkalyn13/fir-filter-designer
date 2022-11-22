@@ -17,6 +17,7 @@ def run_app(window):
     global filter_select
     filter_select = tk.StringVar(root)
     filter_select.set(filters[0])
+    filter_select.trace("w", adjust_by_filter)
 
     ## Setup window types
     global window_select
@@ -87,6 +88,8 @@ def design_filter():
     print(f'Lower Cutoff: {lower_cutoff} Hz') 
     print(f'Upper Cutoff: {upper_cutoff} Hz')
 
+
+## ===== INPUT VALIDATION ===== ##
 ## Validate Input
 def validate_input():
     has_empty = check_empty_inputs()
@@ -108,4 +111,16 @@ def check_integer_inputs():
         error.warning("Invalid Input", "Input must be numeric values.")
         return True
     return False
-    
+
+## ===== ADJUST CUTOFF BY FILTER TYPE ===== ##
+## Adjust by Filter Type
+def adjust_by_filter(*args):
+    if filter_select.get() == "Low Pass":
+        set_cutoff(0, input_upper_cutoff)
+    elif filter_select.get() == "High Pass":
+        set_cutoff(0, input_lower_cutoff)
+
+## Set Cutoff Frequency
+def set_cutoff(freq, input):
+    input.delete(0,tk.END)
+    input.insert(0,freq)
