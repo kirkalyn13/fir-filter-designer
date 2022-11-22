@@ -68,7 +68,7 @@ def run_app(window):
 
     ## Buttons
     tk.Button(root, text='DESIGN', command=design_filter, width=10, font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=0, padx=20, pady=10, sticky="E")
-    tk.Button(root, text='RESET', width=10,  font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=1, padx=20, pady=10, sticky="E")
+    tk.Button(root, text='RESET', command=reset_fields, width=10,  font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=1, padx=20, pady=10, sticky="E")
 
 ## Design Filter
 def design_filter():
@@ -77,6 +77,7 @@ def design_filter():
     if is_invalid:
         return
 
+    ## Get Input Values
     selected_filter = filter_select.get()
     selected_window_type = window_select.get()
     sampling_freq = input_sampling_freq.get()
@@ -119,11 +120,23 @@ def check_integer_inputs():
 ## Adjust by Filter Type
 def adjust_by_filter(*args):
     if filter_select.get() == "Low Pass":
-        set_cutoff(0, input_upper_cutoff)
+        set_entry(0, input_upper_cutoff)
     elif filter_select.get() == "High Pass":
-        set_cutoff(0, input_lower_cutoff)
+        set_entry(0, input_lower_cutoff)
 
-## Set Cutoff Frequency
-def set_cutoff(freq, input):
-    input.delete(0,tk.END)
-    input.insert(0,freq)
+## ===== RESET APP UI ===== ##
+## Reset Fields
+def reset_fields():
+    filter_select.set(filters[0])
+    window_select.set(window_types[0])
+    set_entry("", input_sampling_freq)
+    set_entry("", input_filter_taps)
+    set_entry("", input_lower_cutoff)
+    set_entry("", input_upper_cutoff)
+
+## ===== HELPER FUNCTIONS ===== ##
+## Set Entry
+def set_entry(text, entry):
+    entry.delete(0,tk.END)
+    entry.insert(0,text)
+    
