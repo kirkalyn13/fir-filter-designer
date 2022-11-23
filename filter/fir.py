@@ -1,21 +1,21 @@
-# FIR Filter Design Using the Window Function Method
+# FIR Filter Design Using the Window Function method
 # Reference: DSP Fundamentals and Applications by Tan and Jiang (p.288)
 # Input Parameters:
 # N: the number of FIR Filter taps (must be odd and minimum of 3)
-# Fs: sampling frequency in Hz
-# Ftype: the filter type
+# sampling_frequency: sampling frequency in Hz
+# filter_type: the filter type
 #    1. Lowpass filter
 #    2. Highpass filter
 #    3. Bandpass filter
 #    4. Bandstop filter
-# Wtype: the window type
+# window_type: the window type
 #    1. Rectangular
 #    2. Bartlett
 #    3. Hanning
 #    4. Hamming
 #    5. Blackman
-# WnL: lower cutoff frequency in radians.  Set WnL=0 for HPF.
-# WnH: upper cutoff frequency in radians.  Set WnH=0 for LPF.
+# lower_cutoff: lower cutoff frequency in radians.  Set lower_cutoff=0 for HPF.
+# higher_cutoff: upper cutoff frequency in radians.  Set higher_cutoff=0 for LPF.
 # Output:
 # B: Designed FIR filter Coefficients
 
@@ -28,148 +28,149 @@
 
 import numpy as np
 from matplotlib import pyplot as plt
-from operator import add
-from operator import sub
-from operator import mul
-from operator import truediv
+from operator import add, sub, mul, truediv
 from scipy import signal
 
-N = 51 #int(input('Desired # of filter taps(ODD) = '))
-Fs= 3000 #float(input('Sampling Frequency in Hz = '))
-Ftype = int(input('Filter Type #:[1]LPF [2]HPF [3]BPF [4]BSF= '))
-WnL = 500 #float(input('Lower Cutoff Frequency in Hz(0 for HPF) = '))
-WnH = 1000 #float(input('Higher Cutoff Frequency in Hz(0 for LPF) = '))
-Wtype = int(input('Window Type #:[1]Rectangular [2]Bartlett [3]Hanning [4]Hamming [5]Blackman = '))
-M=int((N-1)/2)
-WnL=2*np.pi*WnL/Fs #1.0472
-WnH=2*np.pi*WnH/Fs #2.0944
+def window_method(filter_type, window_type, sampling_frequency, filter_taps, lower_cutoff, higher_cutoff):
+    # filter_taps = 51 #int(input('Desired # of filter taps(ODD) = '))
+    # sampling_frequency= 3000 #float(input('Sampling Frequency in Hz = '))
+    # filter_type = int(input('Filter Type #:[1]LPF [2]HPF [3]BPF [4]BSF= '))
+    # lower_cutoff = 500 #float(input('Lower Cutoff Frequency in Hz(0 for HPF) = '))
+    # higher_cutoff = 1000 #float(input('Higher Cutoff Frequency in Hz(0 for LPF) = '))
+    # window_type = int(input('Window Type #:[1]Rectangular [2]Bartlett [3]Hanning [4]Hamming [5]Blackman = '))
+    m = int((filter_taps-1)/2)
+    lower_cutoff = 2*np.pi*lower_cutoff/sampling_frequency #1.0472
+    higher_cutoff = 2*np.pi*higher_cutoff/sampling_frequency #2.0944
 
-####### FOR HIGHER/UPPER CO FREQ #############
-hHList=list(range(-M,0,1))
-hH = []
-#hH output 1x25
-for x in range(M):
-    lH = np.sin(WnH*hHList[x])/(hHList[x]*np.pi)
-    hH.append(lH) 
+    ## FOR HIGHER/UPPER CO FREQ
+    hh_list = list(range(-m,0,1))
+    hh = []
+    # hh output 1x25
+    for x in range(m):
+        lh = np.sin(higher_cutoff*hh_list[x])/(hh_list[x]*np.pi)
+        hh.append(lh) 
 
-#hH output 1x26
-hH.append(WnH/np.pi)
+    # hh output 1x26
+    hh.append(higher_cutoff/np.pi)
 
-#flip list and append flipped list to hH | 1x51
-for x in reversed(range(M)):
-    hH.append(hH[x])
+    # Flip list and append flipped list to hh | 1x51
+    for x in reversed(range(m)):
+        hh.append(hh[x])
 
-######## FOR LOWER CO FREQ ############
-hLList=list(range(-M,0,1))
-hL = []
-#hH output 1x25
-for x in range(M):
-    lL = np.sin(WnL*hLList[x])/(hLList[x]*np.pi)
-    hL.append(lL) 
+    ## FOR LOWER CO FREQ
+    hl_list = list(range(-m,0,1))
+    hl = []
+    # hh output 1x25
+    for x in range(m):
+        ll = np.sin(lower_cutoff*hl_list[x])/(hl_list[x]*np.pi)
+        hl.append(ll) 
 
-#hH output 1x26
-hL.append(WnL/np.pi)
+    # hh output 1x26
+    hl.append(lower_cutoff/np.pi)
 
-#flip list and append flipped list to hH | 1x51
-for x in reversed(range(M)):
-    hL.append(hL[x])
+    # Flip list and append flipped list to hh | 1x51
+    for x in reversed(range(m)):
+        hl.append(hl[x])
 
-############## COMPUTE h ###############
-h=[]
-if Ftype == 1:
-    h = hL
-elif Ftype == 2:
-    h = list(-1 * np.array(hH)) #1x51
-    h[M] = 1+h[M] #update element 25
-elif Ftype == 3:
-    h = list(map(sub, hH, hL))
-elif Ftype == 4:
-    h = list(map(sub, hL, hH))
-    h[M] = 1+h[M] #update element 25
+    ## COMPUTE h
+    h = []
+    if filter_type == 1:
+        h = hl
+    elif filter_type == 2:
+        h = list(-1 * np.array(hh)) #1x51
+        h[m] = 1+h[m] #update element 25
+    elif filter_type == 3:
+        h = list(map(sub, hh, hl))
+    elif filter_type == 4:
+        h = list(map(sub, hl, hh))
+        h[m] = 1+h[m] #update element 25
 
-############## COMPUTE w #############
-w=[]
-if Wtype == 1:
-    w = list(np.ones(N))
-elif Wtype == 2:
-    x = list(range(-M,M+1,1))
-    y = [M] *N 
-    absList = list(map(abs,x))
-    absL = list(map(truediv,absList,y))
-    w = list(map(sub,list(np.ones(N)),absL))
-elif Wtype == 3:
-    x = list(range(-M,M+1,1))
-    piList = [np.pi] *N
-    y = list(map(mul,x,piList))
-    z = [M] *N 
-    piList2 = list(map(truediv,y,z))
-    cosList = []
-    for a in piList2:
-        cosVal = np.cos(a)
-        cosList.append(cosVal)  
-    mpoint5List = [0.5] *N 
-    mCosList = list(map(mul,mpoint5List,cosList))
-    w = list(map(add,mpoint5List,mCosList))
-elif Wtype == 4:
-    x = list(range(-M,M+1,1))
-    piList = [np.pi] *N
-    y = list(map(mul,x,piList))
-    z = [M] *N 
-    piList2 = list(map(truediv,y,z))
-    cosList = []
-    for a in piList2:
-        cosVal = np.cos(a)
-        cosList.append(cosVal)  
-    mpoint46List = [0.46] *N 
-    apoint54List = [0.54] *N 
-    mCosList = list(map(mul,mpoint46List,cosList))
-    w = list(map(add,apoint54List,mCosList))
-elif Wtype == 5:
-    x = list(range(-M,M+1,1))
-    piList = [np.pi] *N
-    y = list(map(mul,x,piList))
-    z = [M] *N 
-    piList2 = list(map(truediv,y,z))#up to here reuse ok
-    #cosList1
-    cosList1 = []
-    for a in piList2:
-        cosVal1 = np.cos(a)
-        cosList1.append(cosVal1)  
-    mpoint5List = [0.5] *N 
-    fCosList1 = list(map(mul,mpoint5List,cosList1))
-    #cosList2
-    cosList2 = []
-    for a in piList2:
-        cosVal2 = np.cos(2*a)
-        cosList2.append(cosVal2)  
-    mpoint08List = [0.08] *N 
-    fCosList2 = list(map(mul,mpoint08List,cosList2))
+    ## COMPUTE w
+    w = []
+    if window_type == 1:
+        w = list(np.ones(filter_taps))
+    elif window_type == 2:
+        x = list(range(-m,m+1,1))
+        y = [m] * filter_taps 
+        abs_list = list(map(abs,x))
+        abs_l = list(map(truediv,abs_list,y))
+        w = list(map(sub,list(np.ones(filter_taps)),abs_l))
+    elif window_type == 3:
+        x = list(range(-m,m+1,1))
+        pi_list = [np.pi] * filter_taps
+        y = list(map(mul,x,pi_list))
+        z = [m] * filter_taps 
+        pi_list2 = list(map(truediv,y,z))
+        cos_list = []
+        for a in pi_list2:
+            cos_val = np.cos(a)
+            cos_list.append(cos_val)  
+        mpoint5_list = [0.5] * filter_taps 
+        mcos_list = list(map(mul,mpoint5_list,cos_list))
+        w = list(map(add,mpoint5_list,mcos_list))
+    elif window_type == 4:
+        x = list(range(-m,m+1,1))
+        pi_list = [np.pi] * filter_taps
+        y = list(map(mul,x,pi_list))
+        z = [m] * filter_taps 
+        pi_list2 = list(map(truediv,y,z))
+        cos_list = []
+        for a in pi_list2:
+            cos_val = np.cos(a)
+            cos_list.append(cos_val)  
+        mpoint46_list = [0.46] * filter_taps 
+        apoint54_list = [0.54] * filter_taps 
+        mcos_list = list(map(mul,mpoint46_list,cos_list))
+        w = list(map(add,apoint54_list,mcos_list))
+    elif window_type == 5:
+        x = list(range(-m,m+1,1))
+        pi_list = [np.pi] * filter_taps
+        y = list(map(mul,x,pi_list))
+        z = [m] * filter_taps 
+        pi_list2 = list(map(truediv,y,z))   #up to here reuse ok
+        #cos_list1
+        cos_list1 = []
+        for a in pi_list2:
+            cos_val1 = np.cos(a)
+            cos_list1.append(cos_val1)  
+        mpoint5_list = [0.5] * filter_taps
+        f_cos_list1 = list(map(mul,mpoint5_list,cos_list1))
+        #cos_list2
+        cos_list2 = []
+        for a in pi_list2:
+            cos_val2 = np.cos(2*a)
+            cos_list2.append(cos_val2)  
+        mpoint08_list = [0.08] * filter_taps
+        f_cos_list2 = list(map(mul,mpoint08_list,cos_list2))
+        
+        mpoint42_list = [0.42] * filter_taps
+
+        v = list(map(add,mpoint42_list,f_cos_list1))
+        w = list(map(add,v,f_cos_list2))
+
+    plot_filter(h, w)
     
-    mpoint42List = [0.42] *N
+def plot_filter(h, w):
+    ## PLOT MAGNITUDE GRAPH
+    # Designed Filter Coefficients
+    b = list(map(mul,h,w))
+    print("Designed Filter Coefficients = ", b)
 
-    v = list(map(add,mpoint42List,fCosList1))
-    w = list(map(add,v,fCosList2))
+    # freqz function
+    fw, fh = signal.freqz(b)
 
-############ PLOT MAGNITUDE GRAPH ####################
-#Designed Filter Coefficients
-B = list(map(mul,h,w))
-print("Designed Filter Coefficients = ", B)
+    # PLOTTING CONVERSION TO RAD AND DB
+    _, axs = plt.subplots(2)
+    axs[0].set_title('Magnitude-Frequency Response')
+    axs[0].plot(fw/np.pi, 20 * np.log10(abs(fh)), 'b') #PLOT VALUE X
+    axs[0].set_ylabel('Amplitude [dB]', color='b')
+    axs[0].set_xlabel('Normalized Frequency [xπ rad/sample]')
 
-#freqz function
-fW, fH = signal.freqz(B)
-
-#PLOTTING CONVERSION TO RAD AND DB
-fig, axs = plt.subplots(2)
-axs[0].set_title('Magnitude-Frequency Response')
-axs[0].plot(fW/np.pi, 20 * np.log10(abs(fH)), 'b') #PLOT VALUE X
-axs[0].set_ylabel('Amplitude [dB]', color='b')
-axs[0].set_xlabel('Normalized Frequency [xπ rad/sample]')
-
-angles = np.unwrap(np.angle(fH))
-axs[1].set_title('Phase-Frequency Response')
-axs[1].plot(fW/np.pi, angles*(180/np.pi), 'g') #PLOT VALUE Y
-axs[1].set_ylabel('Phase (degrees)', color='g')
-axs[1].grid(True)
-axs[1].axis('tight')
-axs[1].set_xlabel('Normalized Frequency [xπ rad/sample]')
-plt.show()
+    angles = np.unwrap(np.angle(fh))
+    axs[1].set_title('Phase-Frequency Response')
+    axs[1].plot(fw/np.pi, angles*(180/np.pi), 'g') #PLOT VALUE Y
+    axs[1].set_ylabel('Phase (degrees)', color='g')
+    axs[1].grid(True)
+    axs[1].axis('tight')
+    axs[1].set_xlabel('Normalized Frequency [xπ rad/sample]')
+    plt.show()
