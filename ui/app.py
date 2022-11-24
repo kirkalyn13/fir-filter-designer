@@ -73,8 +73,8 @@ def run_app(window, size):
     input_higher_cutoff.grid(row=6, column=1, sticky="E")
 
     ## Buttons
-    tk.Button(root, text='DESIGN', command=design_filter, width=10, font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=0, padx=20, pady=10, sticky="E")
-    tk.Button(root, text='RESET', command=reset, width=10,  font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=1, padx=20, pady=10, sticky="E")
+    tk.Button(root, text='DESIGN', command=design_filter, width=10, font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=0, padx=20, pady=10)
+    tk.Button(root, text='RESET', command=reset, width=10,  font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=1, padx=20, pady=10)
 
 ## Design Filter
 def design_filter():
