@@ -7,14 +7,18 @@ import filter.fir as fir
 
 TITLE_TEXT = "Finite Impulse Response\nFilter Design"
 LOGO_PATH = "./assets/waveform_logo.png"
+EXPANDED_SIZE = "800x500"
 
 FILTERS = fir.FILTERS
 WINDOW_TYPES = fir.WINDOW_TYPES
 
 ## Render App UI
-def run_app(window):
+def run_app(window, size):
+    ## Setup UI
     global root
+    global original_size
     root = window
+    original_size = size
 
     ## Setup Filters
     global filter_select
@@ -70,7 +74,7 @@ def run_app(window):
 
     ## Buttons
     tk.Button(root, text='DESIGN', command=design_filter, width=10, font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=0, padx=20, pady=10, sticky="E")
-    tk.Button(root, text='RESET', command=reset_fields, width=10,  font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=1, padx=20, pady=10, sticky="E")
+    tk.Button(root, text='RESET', command=reset, width=10,  font=font.text, bg=color.accent, fg=color.text_dark).grid(row=7, column=1, padx=20, pady=10, sticky="E")
 
 ## Design Filter
 def design_filter():
@@ -87,8 +91,23 @@ def design_filter():
     lower_cutoff = int(input_lower_cutoff.get())
     higher_cutoff = int(input_higher_cutoff.get())
 
-    fir.window_method(filter_type, window_type, sampling_freq, filter_taps, lower_cutoff, higher_cutoff)
+    filter_coefficients = fir.window_method(filter_type, window_type, sampling_freq, filter_taps, lower_cutoff, higher_cutoff)
+    show_coefficients(filter_coefficients)
 
+## Display Coefficients on Listbox
+def show_coefficients(coefficients):
+    root.geometry(EXPANDED_SIZE)
+
+    global coefficients_label
+    global coefficients_list
+    
+    coefficients_label = tk.Label(root, text="Design Filter\nCoefficients:", bg=color.bg, fg=color.text_light, font=font.text, padx=10)
+    coefficients_label.grid(row=1, column=2)
+    coefficients_list = tk.Listbox(root, width=30)
+    coefficients_list.grid(row=2, column=2, rowspan=7, padx=50)
+
+    for c in coefficients:
+        coefficients_list.insert(tk.END, str('{:0.5e}'.format(c)))
 
 ## ===== INPUT VALIDATION ===== ##
 ## Validate Input
@@ -132,13 +151,20 @@ def adjust_by_filter(*args):
 
 ## ===== RESET APP UI ===== ##
 ## Reset Fields
-def reset_fields():
+def reset():
+    hide_coefficients()
     filter_select.set(FILTERS[0])
     window_select.set(WINDOW_TYPES[0])
     set_entry("", input_sampling_freq)
     set_entry("", input_filter_taps)
     set_entry("", input_lower_cutoff)
     set_entry("", input_higher_cutoff)
+
+## Hide Coefficient Gridbox
+def hide_coefficients():
+    coefficients_label.grid_forget()
+    coefficients_list.grid_forget()
+    root.geometry(original_size)
 
 ## ===== HELPER FUNCTIONS ===== ##
 ## Set Entry

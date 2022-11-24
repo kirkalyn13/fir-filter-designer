@@ -76,7 +76,7 @@ def window_method(filter_type, window_type, sampling_frequency, filter_taps, low
     w = compute_w(window_type, m, filter_taps)
     
     ## Plot Results
-    plot_frequency_response(h, w)
+    return plot_frequency_response(h, w)
 
 ## Compute for h 
 def compute_h(filter_type, m, hl, hh):
@@ -163,7 +163,6 @@ def compute_w(window_type, m, filter_taps):
 def plot_frequency_response(h, w):
     # Designed Filter Coefficients
     b = list(map(mul,h,w))
-    print("Designed Filter Coefficients = ", b)
 
     # freqz function
     fw, fh = signal.freqz(b)
@@ -182,4 +181,7 @@ def plot_frequency_response(h, w):
     axs[1].grid(True)
     axs[1].axis('tight')
     axs[1].set_xlabel('Normalized Frequency [xπ rad/sample]')
+    plt.ion()
     plt.show()
+
+    return b

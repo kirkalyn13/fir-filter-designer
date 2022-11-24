@@ -16,7 +16,7 @@ def main():
     root.iconphoto(False, app_icon)
 
     ## Render App
-    ui.run_app(root)
+    ui.run_app(root, SIZE)
     root.mainloop()
 
 if __name__ == '__main__':
