@@ -99,10 +99,12 @@ def design_filter():
 ## ===== INPUT VALIDATION ===== ##
 ## Validate Input
 def validate_input():
-    has_empty = check_empty_inputs()
-    if has_empty == False:
-        return check_integer_inputs()
-    return has_empty
+    is_invalid = check_empty_inputs()
+    if is_invalid == False:
+        is_invalid = check_integer_inputs()
+    if is_invalid == False:
+        is_invalid = check_filter_taps()
+    return is_invalid
 
 ## Check for Empty Inputs 
 def check_empty_inputs():
@@ -116,6 +118,13 @@ def check_integer_inputs():
     if input_sampling_freq.get().isnumeric() == False or input_filter_taps.get().isnumeric() == False \
          or input_lower_cutoff.get().isnumeric() == False or input_higher_cutoff.get().isnumeric() == False :
         error.warning("Invalid Input", "Input must be numeric values.")
+        return True
+    return False
+
+## Check if filter taps is odd 
+def check_filter_taps():
+    if int(input_filter_taps.get()) % 2 == 0 :
+        error.warning("Invalid Input", "Filter taps must be odd.")
         return True
     return False
 
