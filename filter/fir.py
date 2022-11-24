@@ -17,7 +17,7 @@
 # lower_cutoff: lower cutoff frequency in radians.  Set lower_cutoff=0 for HPF.
 # higher_cutoff: upper cutoff frequency in radians.  Set higher_cutoff=0 for LPF.
 # Output:
-# B: Designed FIR filter Coefficients
+# b: Designed FIR filter Coefficients
 
 # matlab range | [start:step:stop]
 # python range | range(start, stop, step)

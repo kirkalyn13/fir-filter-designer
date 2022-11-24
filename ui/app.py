@@ -62,7 +62,7 @@ def run_app(window):
     input_lower_cutoff = tk.Entry(root)
     input_lower_cutoff.grid(row=5, column=1, sticky="E")
 
-    ## higher Cutoff
+    ## Higher Cutoff
     tk.Label(root, text="Higher Cutoff (Hz):", bg=color.bg, fg=color.text_light, font=font.text, padx=10).grid(row=6, column=0, sticky="W", pady=5)
     input_higher_cutoff = tk.Entry(root)
     input_higher_cutoff.grid(row=6, column=1, sticky="E")
@@ -79,21 +79,18 @@ def design_filter():
         return
 
     ## Get Input Values
-    selected_filter = filter_select.get()
+    selected_filter_type = filter_select.get()
     selected_window_type = window_select.get()
-    sampling_freq = input_sampling_freq.get()
-    filter_taps = input_filter_taps.get()
-    lower_cutoff = input_lower_cutoff.get()
-    higher_cutoff = input_higher_cutoff.get()
+    sampling_freq = int(input_sampling_freq.get())
+    filter_taps = int(input_filter_taps.get())
+    lower_cutoff = int(input_lower_cutoff.get())
+    higher_cutoff = int(input_higher_cutoff.get())
 
-    print(f'Selected Filter: {selected_filter}') 
-    print(f'Selected Filter: {selected_window_type}')
-    print(f'Sampling Frequency: {sampling_freq} Hz') 
-    print(f'Filter Taps: {filter_taps}')
-    print(f'Lower Cutoff: {lower_cutoff} Hz') 
-    print(f'Higher Cutoff: {higher_cutoff} Hz')
+    ## Convert Inputs to Int as needed
+    filter_type = FILTERS.index(selected_filter_type) + 1
+    window_type = WINDOW_TYPES.index(selected_window_type) + 1
 
-    fir.window_method(3, 1, 3000, 51, 500, 1000)
+    fir.window_method(filter_type, window_type, sampling_freq, filter_taps, lower_cutoff, higher_cutoff)
 
 
 ## ===== INPUT VALIDATION ===== ##
