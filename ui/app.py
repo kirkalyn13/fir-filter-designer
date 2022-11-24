@@ -102,9 +102,9 @@ def show_coefficients(coefficients):
     global coefficients_list
     
     coefficients_label = tk.Label(root, text="Design Filter\nCoefficients:", bg=color.bg, fg=color.text_light, font=font.text, padx=10)
-    coefficients_label.grid(row=1, column=2)
+    coefficients_label.grid(row=0, column=2)
     coefficients_list = tk.Listbox(root, width=30)
-    coefficients_list.grid(row=2, column=2, rowspan=7, padx=50)
+    coefficients_list.grid(row=1, column=2, rowspan=7, sticky="NS", padx=50)
 
     for c in coefficients:
         coefficients_list.insert(tk.END, str('{:0.5e}'.format(c)))
