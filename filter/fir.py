@@ -31,13 +31,10 @@ from matplotlib import pyplot as plt
 from operator import add, sub, mul, truediv
 from scipy import signal
 
+FILTERS = ["Low Pass", "High Pass", "Band Pass", "Band Stop"]
+WINDOW_TYPES = ["Rectangular","Bartlett","Hanning","Hamming","Blackman"]
+
 def window_method(filter_type, window_type, sampling_frequency, filter_taps, lower_cutoff, higher_cutoff):
-    # filter_taps = 51 #int(input('Desired # of filter taps(ODD) = '))
-    # sampling_frequency= 3000 #float(input('Sampling Frequency in Hz = '))
-    # filter_type = int(input('Filter Type #:[1]LPF [2]HPF [3]BPF [4]BSF= '))
-    # lower_cutoff = 500 #float(input('Lower Cutoff Frequency in Hz(0 for HPF) = '))
-    # higher_cutoff = 1000 #float(input('Higher Cutoff Frequency in Hz(0 for LPF) = '))
-    # window_type = int(input('Window Type #:[1]Rectangular [2]Bartlett [3]Hanning [4]Hamming [5]Blackman = '))
     m = int((filter_taps-1)/2)
     lower_cutoff = 2*np.pi*lower_cutoff/sampling_frequency #1.0472
     higher_cutoff = 2*np.pi*higher_cutoff/sampling_frequency #2.0944
@@ -74,28 +71,28 @@ def window_method(filter_type, window_type, sampling_frequency, filter_taps, low
 
     ## COMPUTE h
     h = []
-    if filter_type == 1:
+    if filter_type == "Low Pass":
         h = hl
-    elif filter_type == 2:
+    elif filter_type == "High Pass":
         h = list(-1 * np.array(hh)) #1x51
         h[m] = 1+h[m] #update element 25
-    elif filter_type == 3:
+    elif filter_type == "Band Pass":
         h = list(map(sub, hh, hl))
-    elif filter_type == 4:
+    elif filter_type == "Band Stop":
         h = list(map(sub, hl, hh))
         h[m] = 1+h[m] #update element 25
 
     ## COMPUTE w
     w = []
-    if window_type == 1:
+    if window_type == "Rectangular":
         w = list(np.ones(filter_taps))
-    elif window_type == 2:
+    elif window_type == "Bartlett":
         x = list(range(-m,m+1,1))
         y = [m] * filter_taps 
         abs_list = list(map(abs,x))
         abs_l = list(map(truediv,abs_list,y))
         w = list(map(sub,list(np.ones(filter_taps)),abs_l))
-    elif window_type == 3:
+    elif window_type == "Hanning":
         x = list(range(-m,m+1,1))
         pi_list = [np.pi] * filter_taps
         y = list(map(mul,x,pi_list))
@@ -108,7 +105,7 @@ def window_method(filter_type, window_type, sampling_frequency, filter_taps, low
         mpoint5_list = [0.5] * filter_taps 
         mcos_list = list(map(mul,mpoint5_list,cos_list))
         w = list(map(add,mpoint5_list,mcos_list))
-    elif window_type == 4:
+    elif window_type == "Hamming":
         x = list(range(-m,m+1,1))
         pi_list = [np.pi] * filter_taps
         y = list(map(mul,x,pi_list))
@@ -122,7 +119,7 @@ def window_method(filter_type, window_type, sampling_frequency, filter_taps, low
         apoint54_list = [0.54] * filter_taps 
         mcos_list = list(map(mul,mpoint46_list,cos_list))
         w = list(map(add,apoint54_list,mcos_list))
-    elif window_type == 5:
+    elif window_type == "Blackman":
         x = list(range(-m,m+1,1))
         pi_list = [np.pi] * filter_taps
         y = list(map(mul,x,pi_list))

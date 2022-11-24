@@ -7,8 +7,9 @@ import filter.fir as fir
 
 TITLE_TEXT = "Finite Impulse Response\nFilter Design"
 LOGO_PATH = "./assets/waveform_logo.png"
-FILTERS = ["Low Pass", "High Pass", "Band Pass", "Band Stop"]
-WINDOW_TYPES = ["Rectangular","Bartlett","Hanning","Hamming","Blackman"]
+
+FILTERS = fir.FILTERS
+WINDOW_TYPES = fir.WINDOW_TYPES
 
 ## Render App UI
 def run_app(window):
@@ -79,16 +80,12 @@ def design_filter():
         return
 
     ## Get Input Values
-    selected_filter_type = filter_select.get()
-    selected_window_type = window_select.get()
+    filter_type = filter_select.get()
+    window_type = window_select.get()
     sampling_freq = int(input_sampling_freq.get())
     filter_taps = int(input_filter_taps.get())
     lower_cutoff = int(input_lower_cutoff.get())
     higher_cutoff = int(input_higher_cutoff.get())
-
-    ## Convert Inputs to Int as needed
-    filter_type = FILTERS.index(selected_filter_type) + 1
-    window_type = WINDOW_TYPES.index(selected_window_type) + 1
 
     fir.window_method(filter_type, window_type, sampling_freq, filter_taps, lower_cutoff, higher_cutoff)
 
