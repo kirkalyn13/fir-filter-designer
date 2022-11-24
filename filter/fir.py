@@ -70,6 +70,16 @@ def window_method(filter_type, window_type, sampling_frequency, filter_taps, low
         hl.append(hl[x])
 
     ## COMPUTE h
+    h = compute_h(filter_type, m, hl, hh)
+
+    ## COMPUTE w
+    w = compute_w(window_type, m, filter_taps)
+    
+    ## Plot Results
+    plot_results(h, w)
+
+## Compute for h 
+def compute_h(filter_type, m, hl, hh):
     h = []
     if filter_type == "Low Pass":
         h = hl
@@ -81,8 +91,10 @@ def window_method(filter_type, window_type, sampling_frequency, filter_taps, low
     elif filter_type == "Band Stop":
         h = list(map(sub, hl, hh))
         h[m] = 1+h[m] #update element 25
+    return h
 
-    ## COMPUTE w
+## Compute for w
+def compute_w(window_type, m, filter_taps):
     w = []
     if window_type == "Rectangular":
         w = list(np.ones(filter_taps))
@@ -145,10 +157,10 @@ def window_method(filter_type, window_type, sampling_frequency, filter_taps, low
         v = list(map(add,mpoint42_list,f_cos_list1))
         w = list(map(add,v,f_cos_list2))
 
-    plot_filter(h, w)
-    
-def plot_filter(h, w):
-    ## PLOT MAGNITUDE GRAPH
+    return w
+
+## PLOT MAGNITUDE GRAPH
+def plot_results(h, w):
     # Designed Filter Coefficients
     b = list(map(mul,h,w))
     print("Designed Filter Coefficients = ", b)
