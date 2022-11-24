@@ -76,7 +76,7 @@ def window_method(filter_type, window_type, sampling_frequency, filter_taps, low
     w = compute_w(window_type, m, filter_taps)
     
     ## Plot Results
-    plot_results(h, w)
+    plot_frequency_response(h, w)
 
 ## Compute for h 
 def compute_h(filter_type, m, hl, hh):
@@ -160,7 +160,7 @@ def compute_w(window_type, m, filter_taps):
     return w
 
 ## PLOT MAGNITUDE GRAPH
-def plot_results(h, w):
+def plot_frequency_response(h, w):
     # Designed Filter Coefficients
     b = list(map(mul,h,w))
     print("Designed Filter Coefficients = ", b)
@@ -169,7 +169,7 @@ def plot_results(h, w):
     fw, fh = signal.freqz(b)
 
     # PLOTTING CONVERSION TO RAD AND DB
-    _, axs = plt.subplots(2)
+    _, axs = plt.subplots(num="Frequency Response", ncols=2,figsize=(15, 5))
     axs[0].set_title('Magnitude-Frequency Response')
     axs[0].plot(fw/np.pi, 20 * np.log10(abs(fh)), 'b') #PLOT VALUE X
     axs[0].set_ylabel('Amplitude [dB]', color='b')
