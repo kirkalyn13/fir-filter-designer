@@ -1,24 +1,12 @@
 # FIR Filter Designer
-
 FIR Filter Designer App using Window Method written in Python.
 
 ## Installation
-
-Download code zip file from Github repository.
-
-## Requirements
-- Latest version of Python
-- Libraries:
-   - numpy
-   - scipy
-   - matplotlib
-   - tkinter
+1. Download the .rar file from https://github.com/kirkalyn13/fir-filter-designer/releases/tag/v.1.0
+2. Extract/Unzip the .rar file. It should produce a directory containing the "FilterDesigner.exe" file and other software files.
 
 ## Usage
-```python
-## Run the Main Application File (main.py) in the code directory
-python main.py
-```
+Run the "FilterDesigner.exe" from the unzipped directory.
 
 Input Parameters:
 - Filter Types
