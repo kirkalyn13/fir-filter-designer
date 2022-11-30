@@ -36,6 +36,7 @@ Input Parameters:
 - Number of FIR Filter taps.  # Must be odd and minimum of 3.
 - Lower cutoff frequency in radians.  # Set to 0 for High Pass Filter.
 - Higher cutoff: upper cutoff frequency in radians.  # Set to 0 for Low Pass Filter.
+
 Output:
 - Designed FIR filter Coefficients
 - Frequency Response Plot
