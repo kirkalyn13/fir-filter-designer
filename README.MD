@@ -3,9 +3,16 @@
 FIR Filter Designer App using Window Method written in Python.
 
 ## Installation
-```
+
 Download code zip file from Github repository.
-```
+
+## Requirements
+- Latest version of Python
+- Libraries:
+   - numpy
+   - scipy
+   - matplotlib
+   - tkinter
 
 ## Usage
 ```python
@@ -13,7 +20,6 @@ Download code zip file from Github repository.
 python main.py
 ```
 
-```
 Input Parameters:
 - Filter Types
    1. Lowpass filter
@@ -33,15 +39,10 @@ Input Parameters:
 Output:
 - Designed FIR filter Coefficients
 - Frequency Response Plot
-```
 
 ## Authors
-```
-Main Application: Engr. Kirk Alyn Santos
-Matlab to Python Conversion: Engr. Johannes Paulus de Guzman
-```
+- Main Application: Engr. Kirk Alyn Santos
+- Matlab to Python Conversion: Engr. Johannes Paulus de Guzman
 
-## Reference
-```
-DSP Fundamentals and Applications by Tan and Jiang (p.288)
-```
+## References
+- DSP Fundamentals and Applications by Tan and Jiang (p.288)
