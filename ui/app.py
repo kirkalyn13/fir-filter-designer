@@ -3,22 +3,17 @@ from PIL import ImageTk, Image
 import util.color as color
 import util.font as font
 import util.error as error
+import util.constants as constants
 import filter.fir as fir
-
-TITLE_TEXT = "Finite Impulse Response\nFilter Design"
-LOGO_PATH = "./assets/waveform_logo.png"
-EXPANDED_SIZE = "800x500"
 
 FILTERS = fir.FILTERS
 WINDOW_TYPES = fir.WINDOW_TYPES
 
 ## Render App UI
-def run_app(window, size):
+def run_app(window):
     ## Setup UI
     global root
-    global original_size
     root = window
-    original_size = size
 
     ## Setup Filters
     global filter_select
@@ -38,8 +33,8 @@ def run_app(window, size):
     global input_higher_cutoff
 
     ## Title
-    app_logo = ImageTk.PhotoImage(Image.open(LOGO_PATH))
-    tk.Label(root, text=TITLE_TEXT, bg=color.bg, fg=color.text_light, font=font.title, padx=10).grid(row=0, column=0, pady=5)
+    app_logo = ImageTk.PhotoImage(Image.open(constants.LOGO_SMALL_PATH))
+    tk.Label(root, text=constants.TITLE_TEXT, bg=color.bg, fg=color.text_light, font=font.title, padx=10).grid(row=0, column=0, pady=5)
     logo = tk.Label(root, image=app_logo, bg=color.bg, pady=5)
     logo.image_names = [app_logo]
     logo.grid(row=0, column=1, sticky="E")
@@ -96,7 +91,7 @@ def design_filter():
 
 ## Display Coefficients on Listbox
 def show_coefficients(coefficients):
-    root.geometry(EXPANDED_SIZE)
+    root.geometry(constants.EXPANDED_SIZE)
 
     global coefficients_label
     global coefficients_list
@@ -122,7 +117,7 @@ def validate_input():
 ## Check for Empty Inputs 
 def check_empty_inputs():
     if input_sampling_freq.get() == "" or input_filter_taps.get() == "" or input_lower_cutoff.get() == "" or input_higher_cutoff.get() == "":
-        error.warning("Incomplete Input", "Please make sure all fields are complete.")
+        error.warning(constants.INCOMPLETE_INPUT, "Please make sure all fields are complete.")
         return True
     return False
 
@@ -130,17 +125,17 @@ def check_empty_inputs():
 def check_integer_inputs():
     if input_sampling_freq.get().isnumeric() == False or input_filter_taps.get().isnumeric() == False \
          or input_lower_cutoff.get().isnumeric() == False or input_higher_cutoff.get().isnumeric() == False :
-        error.warning("Invalid Input", "Input must be numeric values.")
+        error.warning(constants.INVALID_INPUT, "Input must be numeric values.")
         return True
     return False
 
 ## Check if filter taps is odd 
 def check_filter_taps():
     if int(input_filter_taps.get()) % 2 == 0 :
-        error.warning("Invalid Input", "Filter taps must be odd.")
+        error.warning(constants.INVALID_INPUT, "Filter taps must be odd.")
         return True
     if int(input_filter_taps.get()) < 3 :
-        error.warning("Invalid Input", "Minimum value of 3 for filter taps.")
+        error.warning(constants.INVALID_INPUT, "Minimum value of 3 for filter taps.")
         return True
     return False
 
@@ -167,7 +162,7 @@ def reset():
 def hide_coefficients():
     coefficients_label.grid_forget()
     coefficients_list.grid_forget()
-    root.geometry(original_size)
+    root.geometry(constants.ORIGINAL_SIZE)
 
 ## ===== HELPER FUNCTIONS ===== ##
 ## Set Entry

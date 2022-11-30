@@ -2,8 +2,9 @@ import numpy as np
 from matplotlib import pyplot as plt
 from operator import add, sub, mul, truediv
 from scipy import signal
+import util.constants as constants
 
-ICON_PATH = "assets/waveform_icon.ico"
+
 FILTERS = ["Low Pass", "High Pass", "Band Pass", "Band Stop"]
 WINDOW_TYPES = ["Rectangular","Bartlett","Hanning","Hamming","Blackman"]
 
@@ -143,7 +144,7 @@ def plot_frequency_response(sampling_frequency,h, w):
     # PLOTTING CONVERSION TO RAD AND DB
     _, axs = plt.subplots(num="Frequency Response", ncols=2,figsize=(15, 5))
     plot_manager = plt.get_current_fig_manager()
-    plot_manager.window.wm_iconbitmap(ICON_PATH)
+    plot_manager.window.wm_iconbitmap(constants.ICON_PATH)
 
     axs[0].set_title('Magnitude-Frequency Response')
     axs[0].plot((fw/(np.pi))*(sampling_frequency/2), 20 * np.log10(abs(fh)), 'b')   #PLOT VALUE MAG PLOT | rev1: convert fW to Hz
