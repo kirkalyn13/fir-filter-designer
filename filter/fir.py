@@ -1,31 +1,3 @@
-# FIR Filter Design Using the Window Function method
-# Reference: DSP Fundamentals and Applications by Tan and Jiang (p.288)
-# Input Parameters:
-# N: the number of FIR Filter taps (must be odd and minimum of 3)
-# sampling_frequency: sampling frequency in Hz
-# filter_type: the filter type
-#    1. Lowpass filter
-#    2. Highpass filter
-#    3. Bandpass filter
-#    4. Bandstop filter
-# window_type: the window type
-#    1. Rectangular
-#    2. Bartlett
-#    3. Hanning
-#    4. Hamming
-#    5. Blackman
-# lower_cutoff: lower cutoff frequency in radians.  Set lower_cutoff=0 for HPF.
-# higher_cutoff: upper cutoff frequency in radians.  Set higher_cutoff=0 for LPF.
-# Output:
-# b: Designed FIR filter Coefficients
-
-# matlab range | [start:step:stop]
-# python range | range(start, stop, step)
-
-# REVISION HISTORY
-# REV    AUTHOR  COMMENT
-# 0      JP      Initial version, graph for phase-freq response not identical to ma'am Beth sample
-
 import numpy as np
 from matplotlib import pyplot as plt
 from operator import add, sub, mul, truediv
@@ -77,7 +49,7 @@ def window_method(filter_type, window_type, sampling_frequency, filter_taps, low
     w = compute_w(window_type, m, filter_taps)
     
     ## Plot Results
-    return plot_frequency_response(h, w)
+    return plot_frequency_response(sampling_frequency,h, w)
 
 ## Compute for h 
 def compute_h(filter_type, m, hl, hh):
@@ -161,7 +133,7 @@ def compute_w(window_type, m, filter_taps):
     return w
 
 ## PLOT MAGNITUDE GRAPH
-def plot_frequency_response(h, w):
+def plot_frequency_response(sampling_frequency,h, w):
     # Designed Filter Coefficients
     b = list(map(mul,h,w))
 
@@ -174,17 +146,17 @@ def plot_frequency_response(h, w):
     plot_manager.window.wm_iconbitmap(ICON_PATH)
 
     axs[0].set_title('Magnitude-Frequency Response')
-    axs[0].plot(fw/np.pi, 20 * np.log10(abs(fh)), 'b') #PLOT VALUE X
-    axs[0].set_ylabel('Amplitude [dB]', color='b')
-    axs[0].set_xlabel('Normalized Frequency [xπ rad/sample]')
+    axs[0].plot((fw/(np.pi))*(sampling_frequency/2), 20 * np.log10(abs(fh)), 'b')   #PLOT VALUE MAG PLOT | rev1: convert fW to Hz
+    axs[0].set_ylabel('Amplitude (dB)', color='b')
+    axs[0].set_xlabel('Frequency (Hz)')
 
     angles = np.unwrap(np.angle(fh))
     axs[1].set_title('Phase-Frequency Response')
-    axs[1].plot(fw/np.pi, angles*(180/np.pi), 'g') #PLOT VALUE Y
-    axs[1].set_ylabel('Phase (degrees)', color='g')
+    axs[1].plot((fw/(np.pi))*(sampling_frequency/2), angles*(180/np.pi), 'g')   #PLOT VALUE PHASE PLOT | rev1: convert fW to Hz
+    axs[1].set_ylabel('Phase (Degrees)', color='g')
     axs[1].grid(True)
     axs[1].axis('tight')
-    axs[1].set_xlabel('Normalized Frequency [xπ rad/sample]')
+    axs[1].set_xlabel('Frequency (Hz)')
     plt.ion()
     plt.show()
 
