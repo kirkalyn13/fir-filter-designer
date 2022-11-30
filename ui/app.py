@@ -139,6 +139,9 @@ def check_filter_taps():
     if int(input_filter_taps.get()) % 2 == 0 :
         error.warning("Invalid Input", "Filter taps must be odd.")
         return True
+    if int(input_filter_taps.get()) < 3 :
+        error.warning("Invalid Input", "Minimum value of 3 for filter taps.")
+        return True
     return False
 
 ## ===== ADJUST CUTOFF BY FILTER TYPE ===== ##
